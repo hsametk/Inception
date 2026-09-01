@@ -1,0 +1,48 @@
+services:
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:inception            # image name == service name, no "latest" tag
+    build:
+      context: ./requirements/mariadb
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+    secrets:
+      - db_password
+      - db_root_password
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - inception
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -uroot -p\"$$(cat /run/secrets/db_root_password)\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # No "ports:" - MariaDB is only reachable from the docker network, never the host.
+
+# --- Network -----------------------------------------------------------------
+networks:
+  inception:
+    name: inception
+    driver: bridge
+
+# --- Named volumes ---------------------------------------------------------------
+volumes:
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_PATH}/mariadb
+
+# --- Secrets ---------------------------------------------------------------------
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
