@@ -1,0 +1,13 @@
+secrets/*
+!secrets/.gitkeep
+*.env
+.env
+srcs/.env
+
+# --- Host data volumes ---
+/home/*/data/
+
+# --- OS / editor junk ---
+.DS_Store
+*.swp
+*~
