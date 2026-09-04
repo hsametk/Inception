@@ -15,8 +15,8 @@ COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Runtime dirs owned by the unprivileged mysql user.
-RUN mkdir -p /run/mysqld \
+RUN rm -rf /var/lib/mysql/* \
+    && mkdir -p /run/mysqld \
     && chown -R mysql:mysql /run/mysqld /var/lib/mysql
 
 # Documentation only (no port is published to the host - NGINX is the only entrypoint).
