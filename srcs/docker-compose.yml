@@ -50,6 +50,27 @@ services:
         condition: service_healthy
     restart: unless-stopped
     # No "ports:" - only nginx (via the docker network, port 9000) talks to php-fpm.
+  nginx:
+      container_name: nginx
+      image: nginx:inception
+      init: true
+      build:
+        context: ./requirements/nginx
+        dockerfile: Dockerfile
+        args:
+          - DOMAIN_NAME
+          - CERTS_KEY
+          - CERTS_CRT
+      networks:
+        - inception
+      ports:
+        - "443:443"
+      volumes:
+        - wordpress:/var/www/html
+      restart: always
+      depends_on:
+        - mariadb
+        - wordpress
 
 # --- Network -----------------------------------------------------------------
 networks:
