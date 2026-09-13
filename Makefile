@@ -5,14 +5,17 @@ COMPOSE = docker compose -f $(COMPOSE_FILE)
 
 DATA_PATH ?= $(HOME)/data
 
-.PHONY: all build up down stop start restart logs ps clean fclean re
+.PHONY: all build up down stop start restart logs ps clean fclean re secrets
 
 all: up
 
-build:
+secrets:
+	./secrets/generate_secrets.sh
+
+build: secrets
 	$(COMPOSE) build
 
-up:
+up: secrets
 	mkdir -p $(DATA_PATH)/mariadb $(DATA_PATH)/wordpress
 	$(COMPOSE) up -d --build
 
