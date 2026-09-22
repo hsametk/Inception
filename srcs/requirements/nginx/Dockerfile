@@ -14,12 +14,9 @@ RUN 		apt -y install nginx openssl
 RUN 		openssl req -x509 -sha256 -nodes \
 			-newkey rsa:4096 \
 			-days 365 \
-			-subj "/C=BR/ST=Sao Paulo/L=Sao Paulo/O=42SP/OU=Inception/CN=hakotu.42.fr" \
+			-subj "/C=TR/ST=Istanbul/L=Istanbul/O=42Istanbul/OU=Inception/CN=${DOMAIN_NAME}" \
 			-keyout ${CERTS_KEY} \
 			-out ${CERTS_CRT} 
-
-# Guarantee that Nginx is using TSLv1.3 
-RUN 		sed -i 's/ssl_protocols.*/ssl_protocols TLSv1.3;/' /etc/nginx/nginx.conf
 
 # Copy configuration file
 COPY 		./conf/https.conf /etc/nginx/conf.d/

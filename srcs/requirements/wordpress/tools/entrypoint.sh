@@ -3,6 +3,15 @@ set -e
 
 cd /var/www/html
 
+# Subject rule: the admin username must not contain admin/Admin/administrator/Administrator.
+# "administrator" already contains "admin", so a single case-insensitive substring check covers both.
+case "$(echo "${WP_ADMIN_USER}" | tr '[:upper:]' '[:lower:]')" in
+	*admin*)
+		echo "[entrypoint] WP_ADMIN_USER='${WP_ADMIN_USER}' is not allowed (must not contain admin/administrator)." >&2
+		exit 1
+		;;
+esac
+
 # Each step checks its own precondition, so a restart after a partial failure
 # (e.g. DB not reachable yet) resumes instead of re-doing finished work.
 

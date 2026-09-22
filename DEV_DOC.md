@@ -48,9 +48,9 @@ cache is automatically invalidated when their values change, so editing
 enough to pick up a new domain.
 
 `ssl_protocols` is set at the `server` block level in `conf/https.conf`
-(`TLSv1.2 TLSv1.3`) — this takes precedence over the value the Dockerfile
-`sed`s into the top-level `nginx.conf`, which is effectively redundant but
-harmless.
+(`TLSv1.2 TLSv1.3`) — this is the only place it's configured; there's no need
+to also touch the top-level `nginx.conf`, since the more specific `server`
+block setting is what actually applies.
 
 ## Volumes
 
