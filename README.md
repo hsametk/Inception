@@ -165,13 +165,22 @@ Implementation notes and rationale for each service: [DEV_DOC.md](DEV_DOC.md).
 - [PHP-FPM documentation](https://www.php.net/manual/en/install.fpm.php)
 - Article: [About PID 1 and container init systems](https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/)
 
-**AI usage**: The Dockerfiles, entrypoint scripts, and `docker-compose.yml`
-are my own work. I asked Claude for help mainly when `docker compose up`
-wouldn't run (blank env vars, an nginx build error, a 404 on every page, a
-WordPress duplicate-email error) — I checked each fix against the actual
-file before applying it and re-tested with `docker logs`/`curl` afterwards.
-It also wrote the `Makefile` and a first draft of this README, which I went
-through afterwards to make sure I could explain it myself. For the
-theoretical parts (VM vs Docker, secrets vs env vars, network, volumes) I
-asked Claude questions to understand the concepts rather than just taking
-the written paragraphs as-is.
+### AI usage
+
+The Dockerfiles, entrypoint scripts, and `docker-compose.yml` are my own
+work. I used Claude (Claude Code) as a support tool throughout the project,
+for the following, specific things:
+
+- **Debugging.** When `docker compose up` failed or behaved unexpectedly
+  (blank env vars, an nginx build error, a 404 on every page, a WordPress
+  duplicate-email error), I described the symptom and asked for likely
+  causes. I checked every suggested fix against the actual file before
+  applying it, and re-verified with `docker logs` / `curl` / `docker exec`
+  afterwards rather than assuming the fix worked.
+- **Understanding, not just generating.** For the theoretical/comparison
+  parts of this README (VM vs Docker, secrets vs env vars, Docker network vs
+  host network, volumes vs bind mounts) and for line-by-line explanations of
+  each Dockerfile and entrypoint script, I asked Claude questions to build
+  my own understanding, and I can explain each design choice above without
+  referring back to the conversation — this was deliberate, since I need to
+  defend this project without AI assistance in the room.
