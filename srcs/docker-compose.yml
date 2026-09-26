@@ -2,7 +2,7 @@ services:
 
   mariadb:
     container_name: mariadb
-    image: mariadb:inception            # image name == service name, no "latest" tag
+    image: mariadb:inception
     build:
       context: ./requirements/mariadb
     environment:
@@ -22,7 +22,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    # No "ports:" - MariaDB is only reachable from the docker network, never the host.
 
   wordpress:
     container_name: wordpress
@@ -49,7 +48,6 @@ services:
       mariadb:
         condition: service_healthy
     restart: unless-stopped
-    # No "ports:" - only nginx (via the docker network, port 9000) talks to php-fpm.
   nginx:
       container_name: nginx
       image: nginx:inception
